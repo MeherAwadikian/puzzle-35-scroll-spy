@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forge Studio — Documentation (scroll-spy sidebar)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" aria-label="Section navigation">
+      <div class="sidebar-inner">
+        <div class="brand">◆ Forge Docs</div>
+        <nav id="toc">
+          <a href="#overview" data-target="overview">Overview</a>
+          <a href="#install" data-target="install">Installation</a>
+          <a href="#config" data-target="config">Configuration</a>
+          <a href="#usage" data-target="usage">Usage</a>
+          <a href="#theming" data-target="theming">Theming</a>
+          <a href="#api" data-target="api">API Reference</a>
+          <a href="#faq" data-target="faq">FAQ</a>
+          <a href="#support" data-target="support">Support</a>
+        </nav>
+        <div class="progress" aria-hidden="true">
+          <span id="progress-label">Overview</span>
+          <div class="progress-bar"><div id="progress-fill"></div></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section id="overview">
+        <h1>Overview</h1>
+        <p>This page demonstrates a sticky scroll-spy sidebar: as you scroll through the document, the navigation on the left automatically highlights the section currently in view, and clicking a link smooth-scrolls to that section. The active state is driven by a real <code>IntersectionObserver</code>, not a throttled scroll-position calculation.</p>
+        <p class="filler">Forge Studio builds product interfaces where motion and navigation explain structure rather than decorate it. A scroll-spy is a small example of that idea: the reader never loses their place in a long document.</p>
+      </section>
+
+      <section id="install">
+        <h1>Installation</h1>
+        <p>Drop the three files (<code>index.html</code>, <code>styles.css</code>, <code>spy.js</code>) onto any static host. No build step, no dependencies, no framework.</p>
+        <p class="filler">The scroll-spy itself is about 40 lines of vanilla JavaScript. It observes every <code>&lt;section&gt;</code> that has a matching nav link and updates the <code>.active</code> class as sections cross a horizontal trigger line near the top of the viewport.</p>
+      </section>
+
+      <section id="config">
+        <h1>Configuration</h1>
+        <p>The one tunable value is the observer's <code>rootMargin</code>, which sets where in the viewport a section counts as "active." Here it's biased toward the top third so the highlighted item matches what the reader is actually looking at.</p>
+        <p class="filler">A too-aggressive margin makes the active item flicker between neighbors; a too-loose one highlights a section before it's really on screen. The value below is a reasonable default for long-form docs.</p>
+      </section>
+
+      <section id="usage">
+        <h1>Usage</h1>
+        <p>Add a <code>&lt;section id="..."&gt;</code> for each chunk of content and a matching <code>&lt;a href="#..." data-target="..."&gt;</code> in the sidebar. The script wires everything up automatically on load — no per-section configuration.</p>
+        <p class="filler">Clicking a link uses native CSS <code>scroll-behavior: smooth</code> plus <code>scroll-margin-top</code> on each section so headings aren't hidden under the sticky header on jump.</p>
+      </section>
+
+      <section id="theming">
+        <h1>Theming</h1>
+        <p>All colors are CSS custom properties on <code>:root</code>. The active nav link, progress bar, and accent all derive from a single <code>--accent</code> variable.</p>
+        <p class="filler">Because the active state is a plain <code>.active</code> class toggle, you can style it however you like — a left border, a background pill, a bold weight — without touching the JavaScript.</p>
+      </section>
+
+      <section id="api">
+        <h1>API Reference</h1>
+        <p>The script exposes nothing globally by design; it's a self-contained side effect. If you need programmatic control, the <code>IntersectionObserver</code> instance and the <code>sections</code>/<code>links</code> maps are easy to lift out into a module.</p>
+        <p class="filler">A common extension is to also update <code>location.hash</code> as the active section changes, so the URL reflects scroll position — deliberately left out here to avoid polluting browser history on every scroll.</p>
+      </section>
+
+      <section id="faq">
+        <h1>FAQ</h1>
+        <p><strong>Why IntersectionObserver instead of a scroll listener?</strong> It's async, off the main thread, and doesn't require manual throttling — far smoother than recomputing offsets on every scroll event.</p>
+        <p class="filler"><strong>Does it work with a variable-height sticky header?</strong> Yes — adjust <code>scroll-margin-top</code> and the observer's top <code>rootMargin</code> to match the header height.</p>
+      </section>
+
+      <section id="support">
+        <h1>Support</h1>
+        <p>This is a demo page for Task Forge puzzle #35. The pattern is production-safe and dependency-free.</p>
+        <p class="filler">The last section is intentionally tall enough that it can scroll to the top of the viewport, so the scroll-spy can mark it active even though there's nothing below it — a common edge case that naive scroll-position implementations get wrong.</p>
+        <div style="height: 40vh"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="spy.js"></script>
+</body>
+</html>
